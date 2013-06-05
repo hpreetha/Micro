@@ -1,0 +1,6 @@
+module.exports = Spine.Controller.sub({
+	
+	// your code goes here
+	
+});
+	

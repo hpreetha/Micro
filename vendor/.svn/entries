@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1695"
+   name=""
+   committed-date="2013-04-18T13:28:01.990032Z"
+   url="http://chekeystone.virtusa.com/virtusaranddmob/trunk/Releases/SourceCode/Source/ProjectMicro/Framework/vendor"
+   last-author="syedimdiyasa"
+   kind="dir"
+   uuid="5521aafc-4890-0410-adc9-c6d7570a2943"
+   repos="http://chekeystone.virtusa.com/virtusaranddmob"
+   revision="1695"/>
+<entry
+   name="styles"
+   kind="dir"/>
+<entry
+   name="scripts"
+   kind="dir"/>
+</wc-entries>

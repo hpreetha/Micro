@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="1695"
+   name=""
+   committed-date="2013-04-18T13:28:01.990032Z"
+   url="http://chekeystone.virtusa.com/virtusaranddmob/trunk/Releases/SourceCode/Source/ProjectMicro/Framework/vendor/scripts/common"
+   last-author="syedimdiyasa"
+   kind="dir"
+   uuid="5521aafc-4890-0410-adc9-c6d7570a2943"
+   repos="http://chekeystone.virtusa.com/virtusaranddmob"
+   revision="1695"/>
+<entry
+   committed-rev="744"
+   name="bootstrapx-clickover.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2013-02-21T05:42:38.747265Z"
+   checksum="1c8ebf7d4f3cb9df8ad62e440c174e3b"
+   last-author="syedimdiyasa"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="714"
+   name="iscroll.js"
+   text-time="2013-04-24T10:47:08.000000Z"
+   committed-date="2012-12-26T04:51:29.566274Z"
+   checksum="9c36e62662de5ea31fbb871d26ad0a33"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="1695"
+   name="micro.js"
+   text-time="2013-04-20T11:54:11.000000Z"
+   committed-date="2013-04-18T13:28:01.990032Z"
+   checksum="9f3d7497f5bebc2a127ff7de305fcbd9"
+   last-author="syedimdiyasa"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="jsviews.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="773c1b052c6b952e9a35c5496ff7849d"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="GATrack.js"
+   text-time="2013-04-24T07:06:05.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="8a6e7b40ff7889eb2129f1bb4aeddef8"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="jsrender.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="499753ff97ae40dc88a90a3a5b13ffd8"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="bootstrap.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="f0478590b03732ba73b9a26051edde59"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="714"
+   name="animation.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2012-12-26T04:51:29.566274Z"
+   checksum="5e4846928fd988d0ce1c508712eb1fa0"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="760"
+   name="jquery-1.8.0.js"
+   text-time="2013-04-20T11:54:11.000000Z"
+   committed-date="2013-03-01T12:23:55.099189Z"
+   checksum="641153de91c56f541a30d255741d96a9"
+   last-author="syedimdiyasa"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="jquery-1.7.2.js"
+   text-time="2013-04-20T11:54:11.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="af693f9aea7dae36fb3bef4c9b6e56fb"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="jquery.observable.js"
+   text-time="2013-04-24T07:06:06.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="090388976742b1a8c05c972c09460908"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:10.000000Z"/>
+<entry
+   committed-rev="590"
+   name="touch.js"
+   text-time="2013-04-24T07:05:52.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="637f5491159788abeaeda429444930ac"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+</wc-entries>

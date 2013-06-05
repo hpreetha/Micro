@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#createBtn').on('click', function() {
+					$('#tg').list('create', {
+						itemTmpl : '<span>{{@id}}</span> <-------> <span>{{:name}}</span>',
+						data : [{
+							id : "A",
+							name : "2"
+						},{
+							id : "C",
+							name : "4"
+						},{
+							id : "E",
+							name : "3"
+						},{
+							id : "B",
+							name : "1"
+						}],
+						emptyText : "No Data found",
+						sort : "id",
+						grouper : function(a){ return a.id }
+					});
+				});
+				$('#addBtn').on('click', function() {
+					$('#tg').list('add', [{
+						id : "B",
+						name : "1"
+					}]);
+					$('#tg').list('add', [{
+						id : "A",
+						name : "2"
+					}]);
+					$('#tg').list('add', [{
+						id : "B",
+						name : "3"
+					}]);
+					$('#tg').list('add', [{
+						id : "A",
+						name : "3"
+					}]);
+					$('#tg').list('add', [{
+						id : "C",
+						name : "2"
+					}]);
+					$('#tg').list('add', [{
+						id : "B",
+						name : "0"
+					}]);
+					$('#tg').list('groupBy',function(a){ return a.id })
+				});
+				$('#tg').on('itemTap', function(event, data) {
+					// if(data) {
+						// $('#tg').grid('remove', data);
+					// }
+					// alert($('#tindex').val());/
+					
+				});
+				$('#removeBtn').on('click', function() {
+					// alert($('#tindex').val());/
+					$('#tg').list('sort',{field : "id", order : "desc"});
+				});
+				$('#tg').on('touchmove', function(e) {
+					e.preventDefault();
+				});
+				$('#sortBtn').on('click', function() {
+					// alert($('#tindex').val());/
+					$('#tg').list('sort',"name");
+					
+					 // function(a, b) {
+						// if(a.id > b.id)
+							// return -1;
+						// if(a.id == b.id)
+							// return 0;
+						// if(a.id < b.id)
+							// return 1;
+					// }
+				});
+				$('#refreshBtn').on('click', function() {
+					$('#tg').list('refresh');
+					// $('#tg').list('sort',["id","name"]);
+					//$('#tg').grid('sort',"id");
+				});
+				$('#filterText').on('change', function() {
+					me = this;
+					$('#tg').list('filter', function(a) {
+						if((a.id + "").indexOf($('#filterText').val()) > -1)
+							return true;
+					});
+				});
+				view1 = new Spine.View({
+					template : 'templates/view1.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view2 = new Spine.View({
+					template : 'templates/view2.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view3 = new Spine.View({
+					template : 'templates/view3.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+			});
+
+		</script>
+	</head>
+	<body>
+		<input id="filterText"type="text"/>
+		<input type="text"/>
+		<input type="text"/>
+		<select>
+			<option>1</option><option>1</option><option>1</option><option>1</option>
+		</select>
+		<div id="tg" style="width:600px;height:300px;border:1px solid red;"></div>
+		<button id="createBtn">
+			Create
+		</button>
+		<button id="addBtn">
+			Add
+		</button>
+		<input id="tindex"/>
+		<button id="removeBtn">
+			Remove
+		</button>
+		<button id="sortBtn">
+			Sort
+		</button>
+		<button id="refreshBtn">
+			refresh
+		</button>
+		<div id="viewport" class="viewport">
+			<div id="tg">
+				This is the target
+			</div>
+		</div>
+	</body>
+</html>

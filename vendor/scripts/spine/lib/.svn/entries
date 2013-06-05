@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="746"
+   name=""
+   committed-date="2013-02-21T05:57:56.114930Z"
+   url="http://chekeystone.virtusa.com/virtusaranddmob/trunk/Releases/SourceCode/Source/ProjectMicro/Framework/vendor/scripts/spine/lib"
+   last-author="syedimdiyasa"
+   kind="dir"
+   uuid="5521aafc-4890-0410-adc9-c6d7570a2943"
+   repos="http://chekeystone.virtusa.com/virtusaranddmob"
+   revision="1695"/>
+<entry
+   committed-rev="590"
+   name="local.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="04321cc119d20a911a03af03b86d79b3"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+<entry
+   committed-rev="590"
+   name="manager.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="e2e5813c7e3abb29d6f669bcd167ec08"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+<entry
+   committed-rev="746"
+   name="view.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2013-02-21T05:57:56.114930Z"
+   checksum="2e42c34d6afafd1590516f625645420a"
+   last-author="syedimdiyasa"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+<entry
+   committed-rev="590"
+   name="tmpl.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="fe00fefc7f0299b6b3af810a48e62f98"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+<entry
+   committed-rev="590"
+   name="route.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="5265fd422bce8ee947adad67555bada6"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+<entry
+   committed-rev="590"
+   name="ajax.js"
+   text-time="2013-04-24T07:05:48.000000Z"
+   committed-date="2012-11-20T11:11:34.000103Z"
+   checksum="4cf1e5ee9728ebd134f31db75752c5bc"
+   last-author="pshanthi"
+   kind="file"
+   prop-time="2013-04-20T11:54:11.000000Z"/>
+</wc-entries>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+		$(document).ready(function() {
+				//newController =  require('controllers/MyController');
+				MicroApp = require('main');
+				$('#createButton').on('click', function() {
+					$('#sicknessFormDashboard').grid('create', {
+			headerTmpl : '<div class="flex-5">Name</div><div class="flex-5">Date Of Birth</div><div class="flex-5">UK Address Line1</div><div class="flex-5">Overseas Airport</div><div class="flex-5">Booking Reference</div><div class="flex-5" style="text-align:center;">Status</div><div class="flex-1"></div>',
+			rowTmpl : '<div class="flex-5">{{:customerName}}</div><div class="flex-5">{{:dob}}</div><div class="flex-5">{{@addressLine1}}</div><div class="flex-5">{{@overseasAirpot}}</div><div class="flex-5">{{@bookingRef}}</div>	<div class="flex-1"><div class="ui-icon-delete-grid"></div></div>',
+			rowData : [{customerName:'Asas',dob:'32131',addressLine1:'ssdasd',overseasAirpot:'ABC',bookingRef:'12335'}],
+			headerCls : 'sickness-grid-header',
+			sort : true,
+			scroll :'vertical'
+			//emptyText :'No saved Forms'
+		});
+				});
+				$('#addButton').on('click', function() {
+					$('#sicknessFormDashboard').grid('add', [
+						{customerName:'Preetha',dob:'34567',addressLine1:'tyui',overseasAirpot:'JKL',bookingRef:'6789000'},
+					{customerName:'Bala',dob:'12345',addressLine1:'qwet',overseasAirpot:'ABC',bookingRef:'12335'},
+					{customerName:'Jay',dob:'45678',addressLine1:'ghjk',overseasAirpot:'MNO',bookingRef:'786786789'},
+					{customerName:'Devi',dob:'23456',addressLine1:'zxcvb',overseasAirpot:'GHI',bookingRef:'56789'},
+	{customerName:'Chhas',dob:'67890',addressLine1:'asdfg',overseasAirpot:'DEF',bookingRef:'345567'},
+					]);
+		});
+		});
+		</script>		
+		</head>
+	<body>
+		<button id="createButton">
+			Create
+		</button>
+		<button id="addButton">
+			Add
+		</button>
+<div id="sicknessFormDashboard"style="width: 98%; height:210px;position: relative;top:50px;margin-left: 10px;border: 1px solid #8DC243 ;">
+	
+</div>
+
+</body>
+</html>

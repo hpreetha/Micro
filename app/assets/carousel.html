@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+				<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<style>
+			/* Swipe 2 required styles */
+
+			.swipe {
+				overflow: hidden;
+				visibility: hidden;
+				position: relative;
+			}
+			.swipe-wrap {
+				overflow: hidden;
+				position: relative;
+			}
+			.swipe-wrap > div {
+				float: left;
+				width: 100%;
+				position: relative;
+			}
+			/* END required styles */
+			.swipe-page {
+			}
+		</style>
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+			$(document).ready(function() {
+				// var elem = document.getElementById('mySwipe');
+				// // window.mySwipe = Swipe(elem, {
+				// // // startSlide: 4,
+				// // // auto: 3000,
+				// // // continuous: true,
+				// // // disableScroll: true,
+				// // // stopPropagation: true,
+				// // // callback: function(index, element) {},
+				// // // transitionEnd: function(index, element) {}
+				// // });
+
+				$('#createBtn').on('click', function() {
+
+				});
+				$('#addBtn').on('click', function() {
+
+				});
+				$('#tg').on('itemTap', function(event, data) {
+
+				});
+				$('#removeBtn').on('click', function() {
+
+				});
+				$('#tg').on('touchmove', function(e) {
+
+				});
+				$('#sortBtn').on('click', function() {
+
+				});
+				$('#refreshBtn').on('click', function() {
+
+				});
+				$('#filterText').on('change', function() {
+
+				});
+				view1 = new Spine.View({
+					template : 'templates/view1.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view2 = new Spine.View({
+					template : 'templates/view2.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view3 = new Spine.View({
+					template : 'templates/view3.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				// view1.render("#viewport");
+				window.mySwipe = $('#mySwipe').Swipe();
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="viewport" class="viewport">
+			<div class="view-container active-view" id="view-1369216995050">
+				<div id='mySwipe' style='width:100%;height:100%; background:#aaa;margin:0 auto' class='swipe'>
+					<div class='swipe-wrap'>
+						<div class="swipe-page">
+							<div class="space-div">
+								<font size="4">Illness form for - stomach illness/ear infection/contagious infectious diseases</font>
+								<div class="details">
+									Customer Details
+								</div></br>
+								<div >
+									<div class="text_align">
+										Customer Name*
+									</div>
+									<input type="text" validation="text" value="{{@customerName}}" id="cus_name"  maxlength="200" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual" />
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Date of Birth*
+										</div>
+										<input type="text" value="{{@dob}}" id="cus_dob" placeholder="Enter Text" class="checkDates"  rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"  />
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Customer Telephone No*:
+										</div>
+										<input type="tel" validation="phone" value = "{{@telephone}}" id="cus_phone" maxlength="20" placeholder="Enter Text"/>
+									</div>
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											UK Address line 1*
+										</div>
+										<input type="text" validation="alpha-numeric" value="{{@addressLine1}}" id="cus_addressl1" maxlength="50" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"/>
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Address line 2*
+										</div>
+										<input type="text" validation="alpha-numeric" value="{{@addressLine2}}" id="cus_addressl2"placeholder="Enter Text" maxlength="50" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"/>
+									</div>
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Address line 3
+										</div>
+										<input type="text" validation="alpha-numeric" value="{{@addressLine3}}" id="cus_addressl3" placeholder="Enter Text"maxlength="50" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual" />
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Postcode*
+										</div>
+										<input type="text"  validation="alpha-numeric" value="{{@postCode}}" id="cus_postalcode" placeholder="Enter Text" maxlength="10" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual" />
+									</div>
+								</div>
+							</div>
+							<div class="space-div">
+								<div class="details">
+									Accommodation Details
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Overseas Airport*
+										</div>
+										<div class="select-wrapper">
+											<select id="overseas_airport" rel="Airpot" value="{{@overseasAirpot}}" >
+												<option value="">Select</option>
+												<option value="LCA" >LCA</option>
+												<option value="PFO" >PFO</option>
+											</select>
+										</div>
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<label>Arrival Date*</label>
+										<input type="text" value="{{@arrivalDate}}" id="arr_date" class="checkDates" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"/>
+										<label>Departure Date*</label>
+										<input type="text" value="{{@departureDate}}" id="dep_date"class="checkDates" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"/>
+									</div>
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Booking Ref*
+										</div>
+										<input type="tel" validation="telephone" value="{{@bookingRef}}" id="bookingRef" maxlength="20" placeholder="Enter Text" />
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Number in Party
+										</div>
+										<div class="select-wrapper">
+											<select value="{{@numberInParty}}">
+												<option value="">Select</option>
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+												<option value="9">9</option>
+												<option value="10">10</option>
+												<option value="11">11</option>
+												<option value="12">12</option>
+												<option value="13">13</option>
+												<option value="14">14</option>
+												<option value="15">15</option>
+												<option value="16">16</option>
+												<option value="17">17</option>
+												<option value="18">18</option>
+												<option value="19">19</option>
+												<option value="20">20</option>
+											</select>
+										</div>
+									</div>
+								</div></br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 2;">
+										<div class="text_align" >
+											Accommodation Name*
+										</div>
+										<div class="select-wrapper">
+											<select id="accom_name" style="width: 180px;" rel="accomodations" value="{{@accommodationName}}">
+												<option value="">Select</option>
+												{{if overseasAirpot=="LCA"}} <option value="Alion Beach">Alion Beach</option><option value="Alva">Alva</option><option value="Anais Bay">Anais Bay</option><option value="Anais Bay Apartments">Anais Bay Apartments</option><option value="Anesis">Anesis</option><option value="Anthea">Anthea</option><option value="Antigoni">Antigoni</option><option value="Atlantica Aeneas">Atlantica Aeneas</option><option value="Atlantica Bay">Atlantica Bay</option><option value="Atlantica Miramare">Atlantica Miramare</option><option value="Atlantica Oasis Hotel">Atlantica Oasis Hotel</option><option value="Atlantica Sancta Napa">Atlantica Sancta Napa</option><option value="Atlantica Sun Garden">Atlantica Sun Garden</option><option value="Barbara Apartments">Barbara Apartments</option><option value="Brilliant">Brilliant</option><option value="Capo Bay">Capo Bay</option><option value="Chrystalla">Chrystalla</option><option value="Constantinos the Great">Constantinos the Great</option><option value="Electra Village">Electra Village</option><option value="Elias Beach">Elias Beach</option><option value="Evabelle">Evabelle</option><option value="Four Seasons">Four Seasons</option><option value="Golden Coast Beach">Golden Coast Beach</option><option value="Green Bungalows">Green Bungalows</option><option value="Kanika Pantheon">Kanika Pantheon</option><option value="Limanaki Beach">Limanaki Beach</option><option value="Loutsiana">Loutsiana</option><option value="Melpo Antia">Melpo Antia</option><option value="Mimosa Hotel">Mimosa Hotel</option><option value="Napa Mermaid">Napa Mermaid</option><option value="Napa Plaza">Napa Plaza</option><option value="Narcissos">Narcissos</option><option value="Nestor">Nestor</option><option value="Nissi Beach">Nissi Beach</option><option value="Nissi Park Hotel">Nissi Park Hotel</option><option value="Olympic Lagoon Resort">Olympic Lagoon Resort</option><option value="Papantonia">Papantonia</option><option value="Pernera Beach">Pernera Beach</option><option value="Petrosana">Petrosana</option><option value="Royal Apollonia Beach">Royal Apollonia Beach</option><option value="Sandra">Sandra</option><option value="Senator">Senator</option><option value="Sunrise Beach">Sunrise Beach</option><option value="Sunrise Pearl">Sunrise Pearl</option><option value="Sunrise Pearl Suites">Sunrise Pearl Suites</option><option value="Tasia Maris">Tasia Maris</option><option value="Tasia Maris Gardens">Tasia Maris Gardens</option><option value="Tasia Maris Oasis">Tasia Maris Oasis</option><option value="Tasia Maris Sands">Tasia Maris Sands</option><option value="Tsokkos Gardens Hotel">Tsokkos Gardens Hotel</option><option value="Villa Andriana">Villa Andriana</option><option value="Villa Armostia">Villa Armostia</option><option value="Villa Rose">Villa Rose</option><option value="Vrissaki Beach Hotel">Vrissaki Beach Hotel</option><option value="other">Other</option>
+												{{/if}}
+												{{if overseasAirpot=="PFO"}} <option value="Alex the Great">Alex the Great</option><option value="Aliathon">Aliathon</option><option value="Anemi">Anemi</option><option value="Annabelle">Annabelle</option><option value="Aphrodite Hills">Aphrodite Hills</option><option value="Asimina Suites">Asimina Suites</option><option value="Athena Beach">Athena Beach</option><option value="Athena Royal Beach">Athena Royal Beach</option><option value="Atlantica Bay">Atlantica Bay</option><option value="Atlantica Golden Beach">Atlantica Golden Beach</option><option value="Atlantica Miramare">Atlantica Miramare</option><option value="Atlantica Oasis Hotel">Atlantica Oasis Hotel</option><option value="Avanti">Avanti</option><option value="Avanti Village">Avanti Village</option><option value="Ayii Anargyri">Ayii Anargyri</option><option value="Crown Resorts Horizon">Crown Resorts Horizon</option><option value="Cynthiana">Cynthiana</option><option value="Cypotel Cypria Maris">Cypotel Cypria Maris</option><option value="Damon">Damon</option><option value="Eleni Village">Eleni Village</option><option value="Elias Beach">Elias Beach</option><option value="Elysium">Elysium</option><option value="Four Seasons">Four Seasons</option><option value="Imperial">Imperial</option><option value="Kanika Pantheon">Kanika Pantheon</option><option value="Kefalonitis">Kefalonitis</option><option value="Kefalos">Kefalos</option><option value="King Jason">King Jason</option><option value="Kissos">Kissos</option><option value="Ledra Beach">Ledra Beach</option><option value="Mayfair">Mayfair</option><option value="Nereus">Nereus</option><option value="Paphos Amathus">Paphos Amathus</option><option value="Phaethon">Phaethon</option><option value="Pioneer">Pioneer</option><option value="Queens Bay">Queens Bay</option><option value="Royal Apollonia Beach">Royal Apollonia Beach</option><option value="St George">St George</option><option value="St George Gardens/Family Club">St George Gardens/Family Club</option><option value="other">Other</option>
+												{{/if}}
+											</select>
+										</div>
+										<input type="text" id="accom_name_other" class="other-field" value="{{@accommodationNameOther}}" disabled maxlength="200"/>
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<label> Travelling With </label>
+										<div class="select-wrapper">
+											<select id="travel_name" value="{{@travellingWith}}">
+												<option value="">Select</option>
+												<option value="Partner">Partner</option>
+												<option value="Husband/Wife">Husband/Wife</option>
+												<option value="Family">Family</option>
+												<option value="Friends">Friends</option>
+												<option value="Group">Group</option>
+												<option value="Parents">Parents</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								</br>
+								<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Room Number*
+										</div>
+										<input type="text" validation="alpha-numeric" value="{{@roomNumber}}" id="roomNo" maxlength="10" placeholder="Enter Text" />
+									</div>
+									<div style="-webkit-box-flex: 1;">
+										<div class="text_align">
+											Board Basis
+										</div>
+										<div class="select-wrapper">
+											<select id="board_basis" value="{{@boardBasis}}">
+												<option value="">Select</option>
+												<option value="AI">AI</option>
+												<option value="SC">SC</option>
+												<option value="BB">BB</option>
+												<option value="RO">RO</option>
+												<option value="HB">HB</option>
+												<option value="FB">FB</option>
+											</select>
+										</div>
+									</div>
+								</div></br>
+							</div>
+						</div>
+						<div>
+							<div class="details">
+								Details of Illness
+							</div></br>
+							<div style="-webkit-box-orient: horizontal;display:-webkit-box;">
+								<div style="-webkit-box-flex: 1;">
+									<label>Date of onset of illness*</label>
+									<input type="text" value="{{@dateOfIllness}}" id="illness_date" class="checkDates" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="right" data-trigger="manual"/>
+								</div>
+								<div style="-webkit-box-flex: 1;">
+									<label>Time Reported</label>
+									<input type="time" value="{{@timeReported}}" id="time_rep" placeholder="Enter Text"/>
+								</div>
+								<div style="-webkit-box-flex: 1;">
+									<label>Date Reported*</label>
+									<input type="text" value="{{@dateReported}}" id="date_rep"class="checkDates" placeholder="Enter Text" rel="tooltip" data-toggle="tooltip" data-placement="top" data-trigger="manual" />
+								</div>
+							</div></br>
+							<div id="firstSymptoms">
+								What symptoms did the customer first display ?- Please tick one box only. If other, please specify below*</br>
+								<div class="hbox">
+									<div class="vbox flex-1">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Diarrhoea only" >
+										Diarrhoea only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Mainly diarrhoea,some vomiting">
+										Mainly diarrhoea, some vomiting
+									</div>
+									<div class="vbox flex-1">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Vomiting only">
+										Vomiting only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Mainly Vomiting,some diarrhoea">
+										Mainly Vomiting, some diarrhoea
+									</div>
+								</div>
+								<div class="hbox">
+									<div class="vbox flex-1">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Fever only">
+										Fever only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Ear infection">
+										Ear infection
+									</div>
+									<div class="vbox flex-1">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="Stomach cramps">
+										Stomach cramps
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="firstSymp" value="{{@primarySymptoms}}" value="other">
+										Other
+										<input type="text" value="{{@primarySymptomsOther}}" id="other_text" placeholder="Enter Text"maxlength="50" disabled/>
+									</div>
+								</div>
+							</div></br>
+							<div>
+								What are the customer's secondary symptoms? Please tick one box only. If other, please specify below</br>
+								<div class="hbox">
+									<div class="vbox flex-1">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Diarrhoea only" >
+										Diarrhoea only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Mainly diarrhoea,some vomiting">
+										Mainly diarrhoea, some vomiting
+									</div>
+									<div class="vbox flex-1">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Vomiting only">
+										Vomiting only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Mainly Vomiting,some diarrhoea">
+										Mainly Vomiting, some diarrhoea
+									</div>
+								</div>
+								<div class="hbox">
+									<div class="vbox flex-1">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Fever only">
+										Fever only
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Ear infection">
+										Ear infection
+									</div>
+									<div class="vbox flex-1">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="Stomach cramps">
+										Stomach cramps
+									</div>
+									<div class="vbox flex-2">
+										<input type="radio" name="secSymp" value="{{@secondarySymptoms}}" value="other">
+										Other
+										<input type="text" id="other_textsec" value="{{@secondarySymptomsOther}}" placeholder="Enter Text" maxlength="50" disabled/>
+									</div>
+								</div>
+							</div></br>
+							<div>
+								<div class="align_label">
+									Duration of Symptoms*
+								</div>
+								<div class="select-wrapper">
+									<select value="{{@durationOfSymptoms}}" id="sympDuration">
+										<option value="">Select</option>
+										<option value="12-24 hours">12-24 hours</option>
+										<option value="1 Day">1 Day</option>
+										<option value="2 Days">2 Days</option>
+										<option value="3 Days">3 Days</option>
+										<option value="4 Days">4 Days</option>
+										<option value="5 Days">5 Days</option>
+										<option value="6 Days">6 Days</option>
+										<option value="7 Days">7 Days</option>
+										<option value="8 Days">8 Days</option>
+										<option value="9 Days">9 Days</option>
+										<option value="10 Days">10 Days</option>
+										<option value="11 Days">11 Days</option>
+										<option value="12 Days">12 Days</option>
+										<option value="13 Days">13 Days</option>
+										<option value="14 Days">14 Days</option>
+									</select>
+								</div>
+							</div></br>
+							<div>
+								<div class="align_label">
+									Has the customer consulted a doctor?*
+								</div>
+								<div class="select-wrapper">
+									<select id="consultDoc" value="{{@consultedDoctor}}">
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+									</select>
+								</div>
+								&nbsp;If yes, what was the diagnosis
+								<input type="text" id="doc_consul" value="{{@consultedDoctorDiagnosis}}" placeholder="Enter Text" maxlength="100" />
+							</div></br>
+							<div>
+								<div class="align_label">
+									Has the customer been hospitalised?*
+								</div>
+								<div class="select-wrapper">
+									<select id="hospitalised" value="{{@hospitalised}}">
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+									</select>
+								</div>
+								&nbsp;If yes, what was the diagnosis
+								<input type="text" id="hospitalisedDiagnosis" value="{{@hospitalisedDiagnosis}}" placeholder="Enter Text" maxlength="100"/>
+							</div></br>
+						</div>
+						<div>
+							<div class="details">
+								Details of Illness
+							</div></br>
+							<div style="-webkit-box-orient: horizontal;display: -webkit-box;">
+								<div style="-webkit-box-flex: 2;width: 0px;">
+									Did the customer use the pool? *
+								</div>
+								<div class="align_select" style="-webkit-box-flex: 1;width: 0px;">
+									<div class="select-wrapper">
+										<select id="usePool" value="{{@usedPool}}">
+											<option value="Yes">Yes</option>
+											<option value="No">No</option>
+										</select>
+									</div>
+								</div>
+								<div style="-webkit-box-flex: 2;width: 0px;">
+									Did the customer swim in the sea?*
+								</div>
+								<div class="align_select" style="-webkit-box-flex: 1;width: 0px;">
+									<div class="select-wrapper">
+										<select id="swim" value="{{@seaSwimming}}">
+											<option value="Yes">Yes</option>
+											<option value="No">No</option>
+										</select>
+									</div>
+								</div>
+							</div></br>
+							<div style="-webkit-box-orient: horizontal;display: -webkit-box;">
+								<div style="-webkit-box-flex: 2;width: 0px;">
+									Did the customer attend the Kids' Club?*
+								</div>
+								<div class="align_select" style="-webkit-box-flex: 1;width: 0px;">
+									<div class="select-wrapper">
+										<select id="kidsClub" value="{{@kidsClub}}">
+											<option value="Yes">Yes</option>
+											<option value="No">No</option>
+										</select>
+									</div>
+								</div>
+								<div style="-webkit-box-flex: 2;width: 2px;">
+									Has the customer been on an Excursion?*
+								</div>
+								<div class="align_select" style="-webkit-box-flex: 1;width: 0px;">
+									<div class="select-wrapper">
+										<select id="onExcursion" value="{{@excursion}}">
+											<option value="Yes" selected>Yes</option>
+											<option value="No">No</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							</br>If yes, please list details: </br>
+							<div>
+								<div class="text_align" id="exc_name_label">
+									Name of excursion<span>*</span>
+								</div>
+								<input type="text" id="exc_name" value="{{@excursionName}}" placeholder="Enter Text" maxlength="100"/>
+								</br>
+								<div class="text_align">
+									Supplied by TUI:
+								</div>
+								<div class="select-wrapper">
+									<select value="{{@suppliedByTui}}">
+										<option value="">Select</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+									</select>
+								</div></br>
+							</div>
+							<label>Was any food consumed outside the accommodation within 72 hours of the onset of sickness?
+								<br>
+								<font size="1.5">If the customer has arrived in resort within 72 hours, include food consumed on the aircraft and in the UK.</font></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<div class="select-wrapper">
+								<select id="wherewhat_select" value="{{@foodConsumed}}">
+									<option value="">Select</option>
+									<option value="Yes">Yes</option>
+									<option value="No">No</option>
+								</select>
+							</div></br>
+							If Yes
+							</br> <div id="sicknessGridHolder" style="width: 90%; min-height:90px;max-height: 190px; position: relative;margin-left: 0px;border: 1px solid #777;"></div>
+						</div>
+						<div>
+							<div class="details">
+								Details of Illness
+							</div></br>
+							<div>
+								<label>Any additional comments or information relating to the customer's sickness, treatments received?</label>
+								<textarea  rows="8" cols="40" style="width:95% !important;" placeholder="Enter Text"; maxlength="200" >{{@additionalComments}}</textarea>
+							</div>
+							<div>
+								<div class="text_align">
+									Customer Signature:*
+								</div>
+								<input type="email" value="{{@customerSignature}}" placeholder="Enter Email address" id="cusSign" maxlength="150" >
+							</div></br>
+							<div>
+								<div class="text_align">
+									Holiday Advisor Signature
+								</div>
+								<input type="text" value="{{@holidayAdvisorSignature}}" id="holidayAdvisory" placeholder="Enter Text" maxlength="200" >
+							</div></br>
+							<div>
+								<div class="text_align">
+									RTM Mail ID
+								</div>
+								<div class="select-wrapper">
+									<select id="rtmMail" value="{{@rtmMailId}}">
+										<option value="Jill.Collins@thomson.co.uk">Jill.Collins@thomson.co.uk</option>
+										<option value="Paula.Strang@thomson.co.uk">Paula.Strang@thomson.co.uk</option>
+										<option value="Sean.Simister@thomson.co.uk">Sean.Simister@thomson.co.uk</option>
+										<option value="John.Maple@thomson.co.uk">John.Maple@thomson.co.uk</option>
+										<option value="Sarah.Cunningham@thomson.co.uk">Sarah.Cunningham@thomson.co.uk</option>
+										<br/>
+										<option value="Brian.Harrison@thomson.co.uk">Brian.Harrison@thomson.co.uk</option>
+										<option value="Karen.Towler@thomson.co.uk ">Karen.Towler@thomson.co.uk </option>
+										<option value="other">Other</option>
+									</select>
+								</div>
+								<input type="email" value="{{@rtmMailIdOther}}" id="rtmEmailId" placeholder="Enter email address" maxlength="200" readonly disabled>
+							</div></br>
+							<div>
+								<div class="text_align">
+									Hotelier email
+								</div>
+								<input type="email" value="{{@hoteliarMail}}" id="hoteliarMail" placeholder="Enter email address" maxlength="200" >
+							</div></br>
+							<div>
+								<div class="text_align">
+									Cyprus Resort Office email
+								</div>
+								<input type="email" value="customermailboxcyprus@thomson.co.uk" id="cyprusResort" placeholder="Enter email address" maxlength="200" disabled >
+							</div></br>
+							<div class="green-btn" rel="submitForm" style="width:90px;margin-left:20px;">
+								Submit
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

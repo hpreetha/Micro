@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+    Hammer.plugins.showTouches();
+ Hammer.plugins.fakeMultitouch();
+			$(document).ready(function() {
+				$('body').on('tap','.push_view',function(){
+					var view = new Spine.View({
+					template : 'templates/dummyView.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+					});
+					$('#viewport').navigationView('push',view,{
+						count : ($('#viewport').data('navigationViewSettings').views.length + 1) 
+					});
+				})
+				$('body').on('tap','.pop_view',function(){
+					var view = new Spine.View({
+					template : 'templates/dummyView.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+					});
+					$('#viewport').navigationView('push',view,{
+						count : ($('#viewport').data('navigationViewSettings').views.length + 1) 
+					});
+				});
+				    $('body').hammer().on("swipeRight",function(event) {
+        console.log(this, event);
+        $('#viewport').navigationView('pop');
+    });
+				// $('body').on('swipeRight','#viewport',function(){
+					// console.log('swipeleft');
+					// $('#viewport').navigationView('pop');
+				// })
+				      $('body').hammer().on("swipeLeft",function(event) {
+        console.log(this, event);
+        var view = new Spine.View({
+					template : 'templates/dummyView.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+					});
+					console.log(view);
+					$('#viewport').navigationView('push',view);
+    });
+				// $('body').on('swipeLeft','#viewport',function(){
+// 						
+						// var view = new Spine.View({
+					// template : 'templates/dummyView.html',
+					// hideAnimation : 'slideout',
+					// showAnimation : 'slidein'
+					// });
+					// console.log(view);
+					// $('#viewport').navigationView('push',view);
+// 					
+				// })
+				view1 = new Spine.View({
+					template : 'templates/dummyView.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				$('#viewport').navigationView('create');
+				$('#viewport').navigationView('push',view1,{
+						count : ($('#viewport').data('navigationViewSettings').views.length + 1)
+					});
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="viewport">
+			
+		</div>
+	</body>
+</html>

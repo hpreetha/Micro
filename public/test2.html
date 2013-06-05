@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#renderBtn').on('click', function() {
+					$('#target').markup({
+						tmpl : $('#tmpls').val(),
+						data : {
+							x : [
+							{ a : 1 , b : "b"} ,{ a: 2 , b : "cd"},{ a:3 , b:"22" }],
+							y : [1,2,3]
+						}
+					});
+				});
+			});
+
+		</script>
+	</head>
+	<body>
+		<textarea id="tmpls" rows="15" style=" width:90%; margin: 0px auto;"></textarea>
+		<br/>
+		<button id="renderBtn">
+			Render
+		</button>
+		<button id="bindBtn">
+			Bind
+		</button>
+		<div id="target" style="border:1px solid red;">
+			
+		</div>
+	</body>
+</html>

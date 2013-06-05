@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+			$(document).ready(function() {
+				window.model1 = Spine.Model.sub();
+				window.model1.configure("SampleModle","name","age");
+				console.log(window.model1);
+				window.model2 = Spine.Model.sub();
+				window.model2.configureWithType("SampleModle",{ name : "name", type : "String"},{ name : "age", type : "Number"});
+				console.log(window.model2);
+				console.log(window.model2.fields);
+				
+			});
+
+		</script>
+	</head>
+	<body>
+		<input id="filterText"type="text"/>
+		<input type="text"/>
+		<input type="text"/>
+		<select>
+			<option>1</option><option>1</option><option>1</option><option>1</option>
+		</select>
+		<div id="tg" style="width:600px;height:300px;border:1px solid red;"></div>
+		<button id="createBtn">
+			Create
+		</button>
+		<button id="addBtn">
+			Add
+		</button>
+		<input id="tindex"/>
+		<button id="removeBtn">
+			Remove
+		</button>
+		<button id="sortBtn">
+			Sort
+		</button>
+		<button id="refreshBtn">
+			refresh
+		</button>
+		<div id="viewport" class="viewport">
+			<div id="tg">
+				This is the target
+			</div>
+		</div>
+	</body>
+</html>

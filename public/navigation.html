@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+		<title>App</title>
+		<link rel="stylesheet" href="./css/app.css" type="text/css">
+		<script src="./vendor/common.js"></script>
+		<script src="./vendor/spine.js"></script>
+		<script src="main.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#createBtn').on('click', function() {
+					$('#tg').list('create', {
+						itemTmpl : '<span>{{@id}}</span> <-------> <span>{{:name}}</span>',
+						data : [{
+							id : "A",
+							name : "2"
+						},{
+							id : "C",
+							name : "4"
+						},{
+							id : "E",
+							name : "3"
+						},{
+							id : "B",
+							name : "1"
+						}],
+						emptyText : "No Data found",
+						sort : "id",
+						grouper : function(a){ return a.id }
+					});
+				});
+				$('#addBtn').on('click', function() {
+					$('#tg').list('add', [{
+						id : "B",
+						name : "1"
+					}]);
+					$('#tg').list('add', [{
+						id : "A",
+						name : "2"
+					}]);
+					$('#tg').list('add', [{
+						id : "B",
+						name : "3"
+					}]);
+					$('#tg').list('add', [{
+						id : "A",
+						name : "3"
+					}]);
+					$('#tg').list('add', [{
+						id : "C",
+						name : "2"
+					}]);
+					$('#tg').list('add', [{
+						id : "B",
+						name : "0"
+					}]);
+					$('#tg').list('groupBy',function(a){ return a.id })
+				});
+				$('#tg').on('itemTap', function(event, data) {
+
+				});
+				$('#removeBtn').on('click', function() {
+
+				});
+
+				$('#sortBtn').on('click', function() {
+
+				});
+				$('#refreshBtn').on('click', function() {
+
+				});
+				
+				$('body').on('tap','#nex1',function(){
+					view2.render('#viewport');
+					$.navigatePage(view2);
+				})
+				$('body').on('tap','#nex2',function(){
+					view3.render('#viewport');
+					$.navigatePage(view3,"","",true);
+				})
+				
+				// $('body').on('#nex2 tap',function(){
+					// view3.render('#viewport');
+					// $.navigatePage(view3,"","",true);
+				// })
+								
+				view1 = new Spine.View({
+					template : 'templates/view1.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view2 = new Spine.View({
+					template : 'templates/view2.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view3 = new Spine.View({
+					template : 'templates/view3.html',
+					hideAnimation : 'slideout',
+					showAnimation : 'slidein'
+				});
+				view1.render('#viewport');
+				$.navigatePage(view1);
+			});
+
+		</script>
+	</head>
+	<body>
+		<div id="viewport">
+			
+		</div>
+	</body>
+</html>

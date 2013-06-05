@@ -1,0 +1,1124 @@
+/*
+ ***************************************************************************************************************************************
+ *List Plugin
+ ***************************************************************************************************************************************
+ * =======================================
+ * API
+ * =======================================
+ * Basic api's structure for list
+ *
+ * General structure :
+ * $(<<target>>).list(<<method name>>, <<method parameter>>);
+ *
+ * To create a list
+ * $(<<target>>).list('create',{
+ * 	showDisclosure : [ture/false], //Optional, Default false
+ * 	listType : [plain/inset], //Optional, Default : plain
+ * 	scroll : [ture/false/horizontal/vertical], //Optional, Default:True
+ * 	itemTmpl : template for rendering items in list // *Required
+ *	cls : css class for the list// Optional
+ * 	itemCls : css class for list items //Optional
+ * });
+ *
+ * To add new items to list
+ * $(<<target>>).list('add',<<data[]>>)
+ *
+ * To refresh the list
+ * $(<<target>>).list('refresh',<<data[]>>)
+ *
+ */
+(function($) {
+	var methods, itemTemplate, listTemplate, scroller, finalPosition;
+	methods = {
+		/*
+		 * Purpose: To create list
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		create : function(options) {
+			//To check if options is provided
+			if(!options) {
+				throw "Options not provided";
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type, options should be of type Object';
+			}
+			var settings = $.extend({
+				'showDisclosure' : false,
+				'type' : 'plain',
+				'scroll' : true,
+				'data' : []
+			}, options);
+			//To check if valid data object is passed
+			if(settings.data) {
+				if(Object.prototype.toString.call(settings.data).slice(8, -1) !== "Array") {
+					throw "Invalid type , data should be of type Array";
+				}
+			}
+			//To check if the target has id, and if it doesn't, an id is generated
+			if(!this.attr('id')) {
+				this.attr('id', 'list-' + new Date().getTime());
+			}
+			settings.id = this.attr('id');
+			//To check if valid list type is give
+			if(settings.type !== 'plain' && settings.type !== 'inset') {
+				throw "Invalid list type";
+			}
+			//To disable scroll if the list type is inset
+			if(settings.type === 'inset') {
+				settings.scroll = false;
+			}
+			//To check whether itemTmpl is given
+			if(settings.itemTmpl) {
+				if($.trim(settings.itemTmpl).indexOf('#') === 0) {
+					if($(settings.itemTmpl).length) {
+						itemTemplate = $(settings.itemTmpl).html();
+						settings.itemTmpl = itemTemplate;
+					} else {
+						throw "Template " + settings.itemTmpl + " not found";
+					}
+				} else {
+					itemTemplate = settings.itemTmpl;
+				}
+
+			} else {
+				throw "itemTmpl not given";
+			}
+			//Adding class to list-container class to the target
+			this.addClass('list-container');
+			//Defining the basic structure of list
+			listTemplate = [//
+			'<ul id="{{:id}}-inner" class="list{{if type == "inset"}} inset{{/if}}{{if cls}} {{:cls}}{{/if}}{{if showDisclosure}} list-disclosure{{/if}}">', //
+			'</ul>', //
+			'</div>'//
+			].join("");
+			//Compiling the list template
+			$.templates('listTemplate', listTemplate);
+			//Emptying the target, before rendering the list
+			this.empty();
+			//Rendering the list structure to target
+			this.append($.render.listTemplate(settings));
+			itemTemplate = [//
+			'<li' + ((settings.itemCls) ? " class=" + settings.itemCls : " ") + '>', //
+			itemTemplate, //
+			'</li>'//
+			].join("");
+			$.templates('itemTemplate', $.convertTemplate(itemTemplate));
+			$.link.itemTemplate('#' + settings.id + '-inner', settings.data);
+			//To create iScroll object, to make the list scrollable
+			if(settings.scroll) {
+				if( typeof settings.scroll === "boolean") {
+					scroller = new iScroll(this.attr('id'));
+				} else if(settings.scroll === "vertical") {
+					scroller = new iScroll(this.attr('id'), {
+						hScroll : false,
+						vScroll : true
+					});
+				} else if(settings.scroll === "horizontal") {
+					scroller = new iScroll(this.attr('id'), {
+						hScroll : true,
+						vScroll : false
+					});
+				} else if(Object.prototype.toString.call(settings.scroll).slice(8, -1) === "Object") {
+					scroller = new iScroll(this.attr('id'), settings.scroll);
+				} else {
+					throw "Invalid scroll option";
+				}
+				if(scroller) {
+					//Binding iscroll object to target div, for later usage
+					this.data('scroller', scroller);
+				}
+			}
+			//Binding the settings object to target div, for later usage
+			this.data('listSettings', settings);
+			//To check if the event is already binded
+			if(!this.data('listEventBind')) {
+				$("#" + settings.id).on("tap", "li", function() {
+					//To add selected class to the tapped li item
+					$('#' + settings.id + ' li').removeClass('selected');
+					$(this).addClass('selected');
+					//To trigger custom "itemTap" event , when an list item is tapped
+					$("#" + settings.id).trigger('itemTap', $.view(this).data);
+				});
+				this.data('listEventBind', true);
+			}
+			if(settings.data.length === 0 && settings.emptyText) {
+				this.append('<div class="empty-text">' + settings.emptyText + '</div>');
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose : To refresh the list
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		refresh : function(data) {
+			if(data) {
+				//To check if valid data object is passed
+				if(Object.prototype.toString.call(data).slice(8, -1) !== "Array") {
+					throw "Invalid type , data should be of type Array";
+				}
+			}
+			var settings = this.data('listSettings');
+			if(!settings) {
+				throw "List has to be created, before refreshing";
+			}
+			if(this.find('.empty-text').length !== 0) {
+				this.find('.empty-text').remove();
+			}
+			if(data) {
+				settings.data = data;
+			}
+			itemTemplate = [//
+			'<li' + ((settings.itemCls) ? " class=" + settings.itemCls : " ") + '>', //
+			settings.itemTmpl, //
+			'</li>'//
+			].join("");
+			$.templates('itemTemplate', $.convertTemplate(itemTemplate));
+			//Emptying the target, before rendering the list
+			$('#' + settings.id + '-inner').empty();
+			$.link.itemTemplate('#' + settings.id + '-inner', settings.data);
+			if(settings.data.length === 0 && settings.emptyText) {
+				this.append('<div class="empty-text">' + settings.emptyText + '</div>');
+			}
+			//To refresh the scroller object
+			if(this.data('scroller')) {
+				this.data('scroller').refresh();
+				this.data('scroller').scrollTo(0, 0, 0, 0);
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose: To add items to existing list
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		add : function(data) {
+			if(data) {
+				if(Object.prototype.toString.call(data).slice(8, -1) !== "Array") {
+					throw "Invalid type , data should be of type Array";
+				}
+			} else {
+				throw "data not provided";
+			}
+			var settings = this.data('listSettings');
+			if(!settings) {
+				throw "List has to be created, before adding item";
+			}
+			if(this.find('.empty-text').length !== 0) {
+				this.find('.empty-text').remove();
+			}
+			finalPosition = $(this).find('ul').height();
+			itemTemplate = [//
+			'<li' + ((settings.itemCls) ? " class=" + settings.itemCls : " ") + '>', //
+			settings.itemTmpl, //
+			'</li>'//
+			].join("");
+			$.templates('itemTemplate', $.convertTemplate(itemTemplate));
+			$.observable(settings.data).insert(settings.data.length, data);
+			//---
+			if((finalPosition + this.height()) > (this.find('ul').height())) {
+				finalPosition = finalPosition - ((finalPosition + this.height()) - (this.find('ul').height()));
+			}
+			//---
+			//To refresh the scroller object
+			if(this.data('scroller')) {
+				this.data('scroller').refresh();
+				if(this.height() < this.find('ul').height()) {
+					this.data('scroller').scrollTo(0, -finalPosition, 0, 0);
+				}
+				//this.data('scroller')
+			}
+			if(settings.data.length === 0 && settings.emptyText) {
+				this.append('<div class="empty-text">' + settings.emptyText + '</div>');
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose : To get the binded scroller object
+		 * Returns : iScroll object
+		 */
+		scroller : function() {
+			return this.data('scroller');
+		}
+	};
+	$.fn.list = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+
+/*
+ ***************************************************************************************************************************************
+ * Grid Plugin
+ ***************************************************************************************************************************************
+ * =======================================
+ * API
+ * =======================================
+ * General structure :
+ * $(<<target>>).grid(<<method name>>, <<method parameter>>);
+ *
+ * To create a grid
+ * $(<<target>>).grid('create',{
+ * 	rowData : row data for grid // *Required
+ *  rowTmpl : template for rendering grid rows // *Required
+ *  headerData : Data for grid header //Optional
+ *  headerTmpl : template for rendering grid header // *Required
+ *	headerCls : css class for the list // Optional
+ * 	rowCls : css class for list items //Optional
+ * 	scroll : [ture/false/horizontal/vertical], //Optional, Default:true
+ * });
+ *
+ * To add new rows to grid
+ * $(<<target>>).grid('add',<<data[]>>)
+ *
+ * To refresh the grid
+ * $(<<target>>).grid('refresh',<<data[]>>)
+ *
+ */
+
+(function($) {
+	var methods, headerTemplate, rowTemplate, gridTemplate, scroller, finalPosition;
+	methods = {
+		/*
+		 * Purpose: To create grid
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		create : function(options) {
+			//To check if options is provided
+			if(!options) {
+				throw "Options not provided";
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type, options should be of type Object';
+			}
+			var settings = $.extend({
+				'scroll' : true,
+				'rowData' : []
+			}, options);
+			//To check if rowData is valid
+			if(settings.rowData) {
+				if(Object.prototype.toString.call(settings.rowData).slice(8, -1) !== "Array") {
+					throw "Invalid type, rowData should be of type Array";
+				}
+			}
+			//To check if headerData is valid
+			if(settings.headerData) {
+				if(Object.prototype.toString.call(settings.headerData).slice(8, -1) !== "Array") {
+					throw "Invalid type, headerData should be of type Array";
+				}
+			}
+			//To check if the target has id, and if it doesn't, an id is generated
+			if(!this.attr('id')) {
+				this.attr('id', 'grid-' + new Date().getTime());
+			}
+			settings.id = this.attr('id');
+			//To check if both rowTmpl and headerTmpl is given
+			if(settings.rowTmpl && settings.headerTmpl) {
+				//To check whether given headerTmpl is valid
+				if($.trim(settings.headerTmpl).indexOf('#') === 0) {
+					if($(settings.headerTmpl).length) {
+						headerTemplate = $(settings.headerTmpl).html();
+						settings.headerTmpl = headerTemplate;
+					} else {
+						throw "Template " + settings.headerTmpl + " not found";
+					}
+				} else {
+					headerTemplate = settings.headerTmpl;
+				}
+				//To check whether given rowTmpl is valid
+				if($.trim(settings.rowTmpl).indexOf('#') === 0) {
+					if($(settings.rowTmpl).length) {
+						rowTemplate = $(settings.rowTmpl).html();
+						settings.rowTmpl = rowTemplate;
+					} else {
+						throw "Template " + settings.rowTmpl + " not found";
+					}
+				} else {
+					rowTemplate = settings.rowTmpl;
+				}
+			} else {
+				throw 'Template(s) not given';
+			}
+			//Defining the basic structure for gridTemplate
+			gridTemplate = [//
+			'<div class="grid-header {{if headerCls}}{{:headerCls}}{{/if}}" >', //
+			'{{for headerData}}', //
+			headerTemplate, //
+			'{{/for}}', //
+			'</div>', //grid-header//
+			'<div class="grid-body" id="{{:id}}-body">', //
+			'<div class="grid-wrapper" id="{{:id}}-wrapper">', //
+			'</div>', //grid-wrapper//
+			'</div>' //grid-body//
+			].join("");
+			this.addClass('grid');
+			//Compiling the grid template
+			$.templates('gridTemplate', $.convertTemplate(gridTemplate));
+			//Emptying the target, before rendering the grid
+			this.empty();
+			//Rendering the grid to target
+			this.append($.render.gridTemplate(settings));
+			rowTemplate = [//
+			'<div class="grid-row ' + ((settings.rowCls) ? settings.rowCls : " ") + '">', //
+			rowTemplate, //
+			'</div>' //
+			].join("");
+			$.templates('rowTemplate', $.convertTemplate(rowTemplate));
+			$.link.rowTemplate('#' + settings.id + '-wrapper', settings.rowData);
+			if(settings.scroll) {
+				if( typeof settings.scroll === "boolean") {
+					scroller = new iScroll(settings.id + '-body');
+				} else if(settings.scroll === "vertical") {
+					scroller = new iScroll(settings.id + '-body', {
+						hScroll : false,
+						vScroll : true
+					});
+				} else if(settings.scroll === "horizontal") {
+					scroller = new iScroll(settings.id + '-body', {
+						hScroll : true,
+						vScroll : false
+					});
+				} else if(Object.prototype.toString.call(settings.scroll).slice(8, -1) === "Object") {
+					scroller = new iScroll(settings.id + '-body', settings.scroll);
+				} else {
+					throw "Invalid scroll option";
+				}
+				if(scroller) {
+					//Binding iscroll object to target div, for later usage
+					this.data('scroller', scroller);
+				}
+			}
+			//Binding the settings object to target div, for later usage
+			this.data('gridSettings', settings);
+			//To check if the event is already binded
+			if(!this.data('gridEventBind')) {
+				$("#" + settings.id).on("tap", ".grid-row", function() {
+					//To add selected class to the tapped grid row
+					$('#' + settings.id + ' .grid-row').removeClass('selected');
+					$(this).addClass('selected');
+					//To trigger custom "rowTap" event , when an grid row is tapped
+					$("#" + settings.id).trigger('rowTap', $.view(this).data);
+				});
+				this.data('gridEventBind', true)
+			}
+			if(settings.rowData.length === 0 && settings.emptyText) {
+				if(this.find(".empty-text").length == 0){
+					this.find('#' + settings.id + '-body').append('<div class="empty-text">' + settings.emptyText + '</div>');	
+				}
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose: To add new items to existing grid
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		add : function(rowData) {
+			if(!rowData) {
+				throw "rowData not provided";
+			}
+			//To check if rowData is valid
+			if(rowData) {
+				if(Object.prototype.toString.call(rowData).slice(8, -1) !== "Array") {
+					throw "Invalid type, rowData should be of type Array";
+				}
+			}
+			var settings = this.data('gridSettings');
+			if(!settings) {
+				throw "Grid has to be created, before adding item";
+			}
+			rowTemplate = [//
+			'<div class="grid-row ' + ((settings.rowCls) ? settings.rowCls : " ") + '">', //
+			settings.rowTmpl, //
+			'</div>' //
+			].join("");
+			finalPosition = this.find('.grid-wrapper').height();
+			//Compiling the row template
+			$.templates('rowTemplate', $.convertTemplate(rowTemplate));
+			$.observable(settings.rowData).insert(settings.rowData.length, rowData);
+			//---
+			if((finalPosition + this.find('.grid-body').height()) > (this.find('.grid-wrapper').height())) {
+				finalPosition = finalPosition - ((finalPosition + this.find('.grid-body').height()) - (this.find('.grid-wrapper').height()));
+			}
+			//---
+			//To refresh the scroller object
+			if(this.data('scroller')) {
+				this.data('scroller').refresh();
+				if(this.find('.grid-body').height() < this.find('.grid-wrapper').height()) {
+					this.data('scroller').scrollTo(0, -finalPosition, 0, 0);
+				}
+			}
+			if(settings.rowData.length === 0 && settings.emptyText) {
+				if(this.find(".empty-text").length == 0){
+					this.find('#' + settings.id + '-body').append('<div class="empty-text">' + settings.emptyText + '</div>');	
+				}
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose : To refresh the grid
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		refresh : function(rowData) {
+			//To check if rowData is valid
+			if(rowData) {
+				if(Object.prototype.toString.call(rowData).slice(8, -1) !== "Array") {
+					throw "Invalid type, rowData should be of type Array";
+				}
+			}
+			var settings = this.data('gridSettings');
+			if(!settings) {
+				throw "Grid has to be created, before refreshing";
+			}
+			if(rowData) {
+				settings.rowData = rowData;
+			}
+			rowTemplate = [//
+			'<div class="grid-row ' + ((settings.rowCls) ? settings.rowCls : " ") + '">', //
+			settings.rowTmpl, //
+			'</div>' //
+			].join("");
+			//Compiling the row template
+			$.templates('rowTemplate', $.convertTemplate(rowTemplate));
+			$.link.rowTemplate('#' + settings.id + '-wrapper', settings.rowData);
+			//To refresh the scroller object
+			if(this.data('scroller')) {
+				this.data('scroller').refresh();
+			}
+			if(settings.rowData.length === 0 && settings.emptyText) {
+				this.find('#' + settings.id + '-body').append('<div class="empty-text">' + settings.emptyText + '</div>');
+			}
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose : To get the binded scroller object
+		 * Returns : iScroll object
+		 */
+		scroller : function() {
+			return this.data('scroller');
+		}
+	};
+	$.fn.grid = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+
+/*
+ ***************************************************************************************************************************************
+ *Loading mask Plugin
+ ***************************************************************************************************************************************
+ * =======================================
+ * API
+ * =======================================
+ * General structure :
+ * $(<<target>>).loadingMask(<<method name>>, <<method parameter>>);
+ *
+ * To show loading mask
+ * $(<<target>>).loadingMask('show',{
+ * 	title : title for loading mask //Optional, Default : "Loading.."
+ *  msg : message to be show in loading mask//Optional Default : null
+ * 	tmpl : template for rendering custom loading mask //Optional
+ * });
+ *
+ * To hide loading mask
+ * To add new rows to grid
+ * $(<<target>>).loadingMask('hide');
+ *
+ */
+(function($) {
+	var settings, methods, mask, maskTemplate;
+	methods = {
+		/*
+		 * Purpose: To show loading mask
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		show : function(options) {
+			//To check if options is provided, it has to be object
+			if(options) {
+				if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+					throw 'Invalid type, options should be of type Object';
+				}
+			}
+			//Extending option with default values
+			var settings = $.extend({
+				'title' : 'Loading...'
+			}, options);
+			//To make sure that the target dosen't have any existing loadingmask
+			if(!this.data('loadingMaskId')) {
+				//Generating an id for loading mask
+				settings.id = 'loadingmask-' + new Date().getTime();
+				//To check if tmpl is given and its valid
+				if(settings.tmpl) {
+					if($.trim(settings.tmpl).indexOf('#') === 0) {
+						if($(settings.tmpl).length) {
+							maskTemplate = $(settings.tmpl).html();
+							settings.tmpl = maskTemplate;
+						} else {
+							throw "Template " + settings.tmpl + " not found";
+						}
+					} else {
+						maskTemplate = settings.tmpl;
+					}
+				} else {
+					//Defining default structure for loading window, when tmpl is not given
+					maskTemplate = [//
+					'<div class="loading-window">', //
+					'<div class="loading-spinner"></div>', //
+					'<div class="loading-title">{{:title}}</div>', //
+					'{{if msg}}<div class="loading-msg">{{:msg}}</div>{{/if}}', //
+					'</div>'//
+					].join("");
+				}
+				//Defining default structure for loading mask
+				mask = [//
+				'<div class="loading-mask" id="{{:id}}">', //
+				maskTemplate, '</div>'//
+				].join("");
+				//Compiling the loading mask template
+				$.templates('mask', mask);
+				//Rendering the loading mask to target
+				this.append($.render.mask(settings));
+				//Bind the id of loading mask to target ,for later usage
+				this.data('loadingMaskId', settings.id);
+			} else {
+				console.log('Warning: Loading mask already exists');
+			}
+
+			//To maintain chainability
+			return this;
+		},
+		/*
+		 * Purpose : To hide existing loading mask
+		 * Returns : jQuery object the plugin was invoked on
+		 */
+		hide : function() {
+			if(this.data('loadingMaskId')) {
+				$('#' + this.data('loadingMaskId')).remove();
+				this.data('loadingMaskId', null);
+			}
+			//To maintain chainability
+			return this;
+		}
+	};
+
+	$.fn.loadingMask = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+
+/*
+ ***************************************************************************************************************************************
+ *Navigation Plugin
+ ***************************************************************************************************************************************
+ * =======================================
+ * API
+ * =======================================
+ * General structure :
+ * $.navigatePage(<<spine view object>>, <<show animation>>, <<hide animation>>);
+ * animations: slidein , slideout, slideinReverse, slideoutReverse
+ */
+$.navigatePage = function(viewObject, showAnimation, hideAnimation) {
+	if(document.activeElement.nodeName === "TEXTAREA" || document.activeElement.nodeName === "INPUT" || document.activeElement.nodeName === "SELECT") {
+		$(document.activeElement).blur();
+	}
+	var activeView = $(viewObject.target+'>.active-view')[0];
+	if(activeView) {
+		if($(activeView).attr('id') === viewObject.id) {
+			console.log('Warn : Cannot navigate to same view');
+			return;
+		}
+	}
+	if(viewObject) {
+		$('#' + viewObject.id).addClass('active-view');
+		if(showAnimation || viewObject.options.showAnimation) {
+			$('#' + viewObject.id).animatePage(showAnimation || viewObject.options.showAnimation);
+		}
+	}
+	if(activeView) {
+		$(activeView).removeClass('active-view');
+		if(hideAnimation || viewObject.options.hideAnimation) {
+			$(viewObject.target).append('<div class="animation-mask"></div>');
+			$(activeView).addClass('prev-view');
+			$(activeView).animatePage(hideAnimation || viewObject.options.hideAnimation);
+			$(activeView).bind('webkitAnimationEnd mozAnimationEnd msAnimationEnd oAnimationEnd animationEnd', function(event) {
+				$(activeView).removeClass('prev-view');
+				$(viewObject.target).find('.animation-mask').remove();
+				$(activeView).unbind(event);
+			});
+		}
+	}
+};
+/*
+ ***************************************************************************************************************************************
+ *Accordion Plugin
+ ***************************************************************************************************************************************
+ * =======================================
+ * API
+ * =======================================
+ * Beta
+ */
+(function($) {
+	var methods, accordionTemplate;
+	methods = {
+		create : function(options) {
+			if(options) {
+				if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+					throw 'Invalid type of options';
+				}
+			}
+			//Creating a settings object
+			var settings = $.extend({
+			}, options);
+			//Emptying the target
+			this.empty();
+			//Adding accordion class the target
+			this.addClass("accordion");
+			//Binding the settings object for later usage
+			this.data("accordionSettings", settings);
+			//To maintain chainability
+			return this;
+		},
+		addGroup : function(options) {
+			//Retriving the settings object
+			var settings = this.data("accordionSettings");
+			//To check if the accordian is created
+			if(!settings) {
+				throw "Accordion has to be created, before adding group(s)";
+			}
+			//To check if options is provided
+			if(!options) {
+				throw 'No options provided';
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type of options';
+			}
+			//To check if groupId is given
+			if(!options.groupId) {
+				throw 'groupId is not provided';
+			}
+			//To check if title is given
+			if(!options.title) {
+				throw 'title is not provided';
+			}
+			//To check if groupId is already used
+			if($('#' + options.groupId).length) {
+				throw 'Provide a valid id. #' + options.groupId + ' already exists';
+			}
+			//To check open parameter
+			if(options.open){
+				if(Object.prototype.toString.call(options.open).slice(8, -1) !== "Boolean"){
+					throw "'open' should be of type boolean";
+				}
+			}
+			//Defining the accordion group template
+			accordionTemplate = [//
+			'<div class="accordion-group">', //
+			'<div class="accordion-heading ' + (settings.headerCls || '') + '{{if headerCls}} {{:headerCls}}{{/if}}">', //
+			'<a class="accordion-toggle" data-toggle="collapse" data-parent="#' + this.attr('id') + '" href="#{{:groupId}}">', //
+			'{{:title}}', //
+			'</a>', //
+			'</div>', //
+			'<div id="{{:groupId}}" class="accordion-body collapse {{if open==true}}in{{/if}}">', //
+			'<div class="accordion-inner ' + (settings.cls || '') + ' {{if cls}}{{:cls}}{{/if}}">', //
+			'</div>', //
+			'</div>', //
+			'</div>'//
+			].join("");
+			//Compiling the the accordion template
+			$.templates('accordionTemplate', accordionTemplate);
+			//Renderding the accordion group
+			this.append($.render.accordionTemplate(options));
+			//Creating a flag, to mark the div as accordionGroup
+			this.find('#' + options.groupId).data('accordionGroup', true);
+			//To maintain chainability
+			return this.find('#' + options.groupId);
+		},
+		addGroupItem : function(options) {
+			if(!this.data('accordionGroup')) {
+				throw 'Not a valid accordian group';
+			}
+			//To check if options is provided
+			if(!options) {
+				throw 'No options provided';
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type of options';
+			}
+			//To check if itemId is provided
+			if(!options.itemId) {
+				throw "Provide the itemId";
+			}
+			//To check if itemId is already used
+			if($('#' + options.itemId).length) {
+				throw 'Provide a valid item id. #' + options.itemId + ' already exists';
+			}
+			//Creating the item container container
+			this.find('.accordion-inner').append(//
+			'<div ' + //
+			'id="' + options.itemId + '" ' + //
+			((options.itemCls) ? 'class="' + options.itemCls + '"' : '') + //
+			'>' + //
+			'</div>');
+			//Returning the jquery object of newly create item container
+			return this.find('#' + options.itemId);
+		}
+	};
+	$.fn.accordion = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+/*
+ ***************************************************************************************************************************************
+ *Tab Plugin
+ ***************************************************************************************************************************************
+ */
+(function($) {
+	var methods, tabTemplate;
+	methods = {
+		create : function(options) {
+			if(options) {
+				if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+					throw 'Invalid type of options';
+				}
+			}
+			//Creating a settings object
+			var settings = $.extend({
+			}, options);
+			//Defining general structure for tab
+			tabTemplate = [//
+			'<ul class="nav nav-tabs">', //
+			'</ul>', //
+			'<div class="tab-content">', //
+			'</div>'//
+			].join("");
+			//Rendering the tab structure to the target div
+			this.html(tabTemplate);
+			//Binding the settings object for later usage
+			this.data("tabSettings", settings);
+			//To maintian chainability
+			return this;
+		},
+		addTab : function(options) {
+			//Retriving the settings object
+			var settings = this.data("tabSettings");
+			//To check to if the tabgroup is created
+			if(!settings) {
+				throw "Tab has to be created, before adding Tab(s)";
+			}
+			//To check if options is provied
+			if(!options) {
+				throw 'No options provided';
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type of options';
+			}
+			//To check if tabId is provided
+			if(!options.tabId) {
+				throw 'tabId is not provided';
+			}
+			//To check if title is provided
+			if(!options.title) {
+				throw 'title is not provided';
+			}
+			//To check if the tabId already exists
+			if($('#' + options.tabId).length) {
+				throw 'Provide a valid id. #' + options.tabId + ' already exists';
+			}
+			//Defining the structure for the tab body
+			var tabBodyTemplate = [//
+			'<div class="tab-pane fade {{if cls}}{{:cls}}{{/if}} ' + ((this.find('div.tab-content .tab-pane').length) === 0 ? 'active in ' : '') + (settings.cls || '') + '" id="{{:tabId}}">', //
+			//Content
+			'</div>'//
+			].join("");
+			//Defining the structure for the tab header
+			var tabHeadTemplate = [//
+			'<li class="{{if tabCls}}{{:tabCls}}{{/if}} ' + ((this.find('ul.nav-tabs li').length) === 0 ? 'active ' : '') + (settings.tabCls || '') + '">', //
+			'<a href="#{{:tabId}}" data-toggle="tab">{{:title}}</a>', //
+			'</li>'//
+			].join("");
+			//Compiling the tab header template
+			$.templates('tabHeadTemplate', tabHeadTemplate);
+			//Compiling the tab body template
+			$.templates('tabBodyTemplate', tabBodyTemplate);
+			//Rendering tab header
+			this.find('ul.nav-tabs').append($.render.tabHeadTemplate(options));
+			//Rendering tab body
+			this.find('div.tab-content').append($.render.tabBodyTemplate(options));
+			//Creating a flag, to mark the div as tabGroup
+			this.find('#' + options.tabId).data('tabGroup', true);
+			//To maintain chainability
+			return this.find('#' + options.tabId);
+		},
+		addTabItem : function(options) {
+			if(!this.data("tabGroup")) {
+				throw "Not a valid tab Group";
+			}
+			//To check if options is provided
+			if(!options) {
+				throw "options not provided";
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type, options should be object';
+			}
+			//To check if itemId is provided
+			if(!options.itemId) {
+				throw "Provide the item id";
+			}
+			//To check if itemId already exisiting
+			if($('#' + options.itemId).length) {
+				throw 'Provide a valid item id. #' + options.itemId + ' already exists';
+			}
+			//Creating a div container
+			this.append('<div id="' + options.itemId + '" ' + ((options.itemCls) ? ' class="' + options.itemCls + '"' : '') + '></div>');
+			//Returning the new added item container
+			return this.find('#' + options.itemId);
+		}
+	};
+	$.fn.tabGroup = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+//HTML Markup Plugin
+(function($) {
+	$.fn.markup = function(options) {
+		//To check if options is provided
+		if(!options) {
+			throw "Options not provided";
+		}
+		//To check if the options is of type object
+		if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+			throw 'Invalid type, options should be of type Object';
+		}
+		//Extending options with default values
+		var settings = $.extend({
+			dataBinding : false
+		}, options);
+		//To check whether data is provided when dataBinding is true
+		if(settings.dataBinding && !settings.data) {
+			throw "Cannot perform bind without data.";
+		}
+		if(settings.tmpl) {
+			if($.trim(settings.tmpl).indexOf('#') === 0) {
+				if($(settings.tmpl).length) {
+					settings.tmpl = $(settings.tmpl).html();
+					if(settings.tmpl.length === 0) {
+						throw "Template " + settings.tmpl + " is empty";
+					}
+				} else {
+					throw "Template " + settings.tmpl + " not found";
+				}
+			}
+		} else if(settings.url) {
+			$.ajax({
+				url : settings.url,
+				async : false,
+				success : function(content, textStatus, jqXHR) {
+					if(jqXHR.getResponseHeader('Content-Type') !== 'text/html') {
+						throw "Invalid Content Type";
+					}
+					if(content.length === 0) {
+						throw "Content is empty";
+					}
+					settings.tmpl = content;
+				},
+				error : function() {
+					throw "Unable to load template. Please check the path and name of the template";
+				}
+			});
+
+		} else {
+			throw "Either tmpl or url has to be provided";
+		}
+		$.templates('markupTemplate', $.convertTemplate(settings.tmpl));
+		if(settings.dataBinding) {
+			$.link.markupTemplate('#' + this.attr('id'), settings.data);
+		} else {
+			this.html($.render.markupTemplate(settings.data));
+		}
+		//To maintain chainability
+		return this;
+	};
+})(jQuery);
+
+/*
+ ***************************************************************************************************************************************
+ *Convert Template Plugin
+ ***************************************************************************************************************************************
+ */
+$.convertTemplate = function(tmpl) {
+	var matched, blockPattern, inputPattern, wholeMatch, data;
+	if(tmpl) {
+		//Pattern for input fields
+		inputPattern = /value\s?=\s?['"]\s?\{\{@(.*?)\}\}\s?['"]/gi;
+		while(( matched = inputPattern.exec(tmpl)) !== null) {
+			tmpl = tmpl.replace(matched[0], 'data-link="' + matched[1] + '"');
+		}
+		//Pattern for html blocks
+		blockPattern = /<[^<>]*>[^<>]*\{\{@(.*?)\}\}[^<>]*<\/[^<>]*>/g;
+		while(( matched = blockPattern.exec(tmpl)) !== null) {
+			wholeMatch = matched[0];
+			data = matched[1];
+			wholeMatch = wholeMatch.replace(">", ' ' + 'data-link="' + data + '">');
+			tmpl = tmpl.replace(matched[0], wholeMatch);
+		}
+		return tmpl;
+	}
+};
+// Vbox
+(function($) {
+	var methods, tabTemplate;
+	methods = {
+		create : function(options) {
+			this.addClass('vbox');
+			return this;
+		},
+		addItem : function(options) {
+			if(!this.hasClass("vbox")) {
+				throw "Not a valid vbox";
+			}
+			//To check if options is provided
+			if(!options) {
+				throw "options not provided";
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type, options should be object';
+			}
+			//To check if itemId is provided
+			if(!options.itemId) {
+				throw "Provide the item id";
+			}
+			//To check if itemId already exisiting
+			if($('#' + options.itemId).length) {
+				throw 'Provide a valid item id. #' + options.itemId + ' already exists';
+			}
+			//To check if flex is valid
+			if(options.flex) {
+				if( typeof options.flex !== "number") {
+					throw "flex has to be a number"
+				}
+				if((options.flex + "").indexOf(".") > -1) {
+					throw "flex should be whole number"
+				}
+			}
+			var itemTemplate = ['<div id="' + options.itemId + '" ' + ((options.itemCls) ? ' class="' + options.itemCls + '{{if flex}} flex{{/if}}"' : '{{if flex}}class="flex"{{/if}}') + //
+			'{{if flex}}style = "-webkit-box-flex: {{:flex}} !important;"{{/if}}' + //
+			'></div>'].join("");
+			$.templates('itemTemplate', itemTemplate);
+			this.append($.render.itemTemplate(options));
+			//Returning the new added item container
+			return this.find('#' + options.itemId);
+		}
+	};
+	$.fn.vbox = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
+// Hbox
+(function($) {
+	var methods, tabTemplate;
+	methods = {
+		create : function(options) {
+			this.addClass('hbox');
+			return this;
+		},
+		addItem : function(options) {
+			if(!this.hasClass("hbox")) {
+				throw "Not a valid hbox";
+			}
+			//To check if options is provided
+			if(!options) {
+				throw "options not provided";
+			}
+			//To check if the options is of type object
+			if(Object.prototype.toString.call(options).slice(8, -1) !== "Object") {
+				throw 'Invalid type, options should be object';
+			}
+			//To check if itemId is provided
+			if(!options.itemId) {
+				throw "Provide the item id";
+			}
+			//To check if itemId already exisiting
+			if($('#' + options.itemId).length) {
+				throw 'Provide a valid item id. #' + options.itemId + ' already exists';
+			}
+			//To check if flex is valid
+			if(options.flex) {
+				if( typeof options.flex !== "number") {
+					throw "flex has to be a number"
+				}
+				if((options.flex + "").indexOf(".") > -1) {
+					throw "flex should be whole number"
+				}
+			}
+			var itemTemplate = ['<div id="' + options.itemId + '" ' + //
+			((options.itemCls) ? ' class="' + options.itemCls + '{{if flex}} flex{{/if}}"' : '{{if flex}}class="flex"{{/if}}') + //
+			'{{if flex}}style = "-webkit-box-flex: {{:flex}} !important;"{{/if}}' + //
+			'></div>'].join("");
+			$.templates('itemTemplate', itemTemplate);
+			this.append($.render.itemTemplate(options));
+			//Returning the new added item container
+			return this.find('#' + options.itemId);
+		}
+	};
+	$.fn.hbox = function(method) {
+		// Method calling logic
+		if(methods[method]) {
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		} else if( typeof method === 'object' || !method) {
+			return methods.init.apply(this, arguments);
+		} else {
+			throw 'Method ' + method + ' does not exist';
+		}
+	};
+})(jQuery);
